@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Contrat / Licence{% endblock %}
+
+{% block body %}
+<div class="container" style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+    
+    <div class="card shadow-sm border-0" style="border-radius: 8px;">
+        
+        {# En-tête bleu clair pour les contrats #}
+        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center" style="border-radius: 8px 8px 0 0; padding: 15px 25px;">
+            <h2 class="h5 mb-0">📜 Nouveau Contrat ou Licence</h2>
+            <a href="{{ path('app_dashboard') }}" class="btn btn-sm btn-light text-info fw-bold">
+                ⬅ Retour
+            </a>
+        </div>
+
+        <div class="card-body" style="padding: 30px;">
+            <p class="text-muted mb-4">Saisissez les détails du contrat, les dates de validité et la ligne budgétaire associée.</p>
+            
+            {{ include('contrat_licence/_form.html.twig') }}
+            
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

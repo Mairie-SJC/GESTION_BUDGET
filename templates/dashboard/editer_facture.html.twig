@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Facture - Budget SI{% endblock %}
+
+{% block body %}
+<div style="max-width: 600px; margin: 20px auto; padding: 0 20px;">
+    
+    <div style="margin-bottom: 20px;">
+        <a href="{{ path('app_dashboard') }}" style="text-decoration: none; color: #3498db;">⬅ Retour au tableau de bord</a>
+    </div>
+
+    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 5px solid #f39c12;">
+        <h2 style="margin-top: 0; color: #333;">✏️ Modifier la facture</h2>
+        <p style="color: #666; font-size: 0.9em;">Numéro actuel : <strong>{{ facture.numeroFacture }}</strong></p>
+        <br>
+
+        {{ form_start(formulaire) }}
+            
+            {# Symfony va générer automatiquement tous les champs du formulaire #}
+            {{ form_widget(formulaire) }}
+            
+            <button type="submit" style="margin-top: 20px; background-color: #f39c12; color: white; padding: 12px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-size: 1em;">
+                Enregistrer les modifications
+            </button>
+            
+        {{ form_end(formulaire) }}
+    </div>
+</div>
+{% endblock %}

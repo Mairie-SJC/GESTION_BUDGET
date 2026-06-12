@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit ContratLicence{% endblock %}
+
+{% block body %}
+    <h1>Edit ContratLicence</h1>
+
+    {{ include('contrat_licence/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_contrat_licence_index') }}">back to list</a>
+
+    {{ include('contrat_licence/_delete_form.html.twig') }}
+{% endblock %}

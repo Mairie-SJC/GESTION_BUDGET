@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Prestataire{% endblock %}
+
+{% block body %}
+<div class="container" style="max-width: 800px; margin: 40px auto; padding: 0 20px;">
+    
+    <div class="card shadow-sm border-0" style="border-radius: 8px;">
+        
+        {# En-tête jaune/orange pour correspondre au tableau de bord #}
+        <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center" style="border-radius: 8px 8px 0 0; padding: 15px 25px;">
+            <h2 class="h5 mb-0">🏢 Ajouter un Prestataire</h2>
+            <a href="{{ path('app_dashboard') }}" class="btn btn-sm btn-light text-dark fw-bold">
+                ⬅ Retour au tableau de bord
+            </a>
+        </div>
+
+        <div class="card-body" style="padding: 30px;">
+            <p class="text-muted mb-4">Renseignez les coordonnées et informations de contact du nouveau prestataire informatique.</p>
+            
+            {{ include('fournisseur/_form.html.twig') }}
+            
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

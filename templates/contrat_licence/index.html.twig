@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ContratLicence index{% endblock %}
+
+{% block body %}
+    <h1>ContratLicence index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>LibelleService</th>
+                <th>FournisseurId</th>
+                <th>MontantAnnuel</th>
+                <th>DateDebut</th>
+                <th>DateFin</th>
+                <th>DatePreavis</th>
+                <th>Statut</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for contrat_licence in contrat_licences %}
+            <tr>
+                <td>{{ contrat_licence.id }}</td>
+                <td>{{ contrat_licence.libelleService }}</td>
+                <td>{{ contrat_licence.fournisseurId }}</td>
+                <td>{{ contrat_licence.montantAnnuel }}</td>
+                <td>{{ contrat_licence.dateDebut ? contrat_licence.dateDebut|date('Y-m-d') : '' }}</td>
+                <td>{{ contrat_licence.dateFin ? contrat_licence.dateFin|date('Y-m-d') : '' }}</td>
+                <td>{{ contrat_licence.datePreavis ? contrat_licence.datePreavis|date('Y-m-d') : '' }}</td>
+                <td>{{ contrat_licence.statut }}</td>
+                <td>
+                    <a href="{{ path('app_contrat_licence_show', {'id': contrat_licence.id}) }}">show</a>
+                    <a href="{{ path('app_contrat_licence_edit', {'id': contrat_licence.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_contrat_licence_new') }}">Create new</a>
+{% endblock %}

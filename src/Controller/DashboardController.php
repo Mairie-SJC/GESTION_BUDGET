@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Repository\ContratLicenceRepository;
 use App\Repository\FournisseurRepository;
 use App\Repository\BudgetRepository;
 use App\Repository\FactureRepository;
-use App\Repository\ContratLicenceRepository;
 use App\Entity\Facture;
 use App\Form\FactureType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,16 +21,23 @@ use setasign\Fpdi\Fpdi;
 class DashboardController extends AbstractController
 {
     #[Route('/', name: 'app_dashboard')]
-    public function index(BudgetRepository $budgetRepository, FactureRepository $factureRepository, ContratLicenceRepository $contratRepository): Response
+    // Attention ici : vérifiez que le nom de votre repository correspond bien à votre entité (ex: ContratsLicencesRepository ou ContratRepository)
+    public function index(BudgetRepository $budgetRepository, FactureRepository $factureRepository, ContratLicenceRepository $contratsRepository): Response
     {
-        $listeBudgets = $budgetRepository->findAll();
-        $listeFactures = $factureRepository->findAll();
-        $listeContrats = $contratRepository->findAll();
+        // 1. La gestion de l'année pour les budgets
+        $anneeEnCours = (int) date('Y');
+        $budgets = $budgetRepository->findBy(['annee' => $anneeEnCours]);
 
+        // 2. On récupère le reste des données
+        $factures = $factureRepository->findAll();
+        $contrats = $contratsRepository->findAll(); // <-- La ligne qui manquait !
+
+        // 3. On envoie TOUT à la vue Twig
         return $this->render('dashboard/index.html.twig', [
-            'budgets' => $listeBudgets,
-            'factures' => $listeFactures,
-            'contrats' => $listeContrats,
+            'budgets' => $budgets,
+            'factures' => $factures,
+            'contrats' => $contrats, // <-- On n'oublie pas de la passer ici !
+            'annee' => $anneeEnCours,
         ]);
     }
 

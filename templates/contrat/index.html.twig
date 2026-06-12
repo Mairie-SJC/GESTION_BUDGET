@@ -1,0 +1,111 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Contrats & Licences{% endblock %}
+
+{% block body %}
+<div style="max-width: 1200px; margin: 20px auto; padding: 20px; font-family: sans-serif;">
+    
+    <h1 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px;">📋 Gestion des Contrats et Licences</h1>
+
+    {# Bouton de retour #}
+    <div style="margin-bottom: 20px;">
+        <a href="{{ path('app_dashboard') }}" style="text-decoration: none; color: #3498db; font-weight: bold;">⬅ Retour au tableau de bord principal</a>
+    </div>
+
+    <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+        
+        {# --- PARTIE GAUCHE : LE FORMULAIRE --- #}
+        <div style="flex: 1; min-width: 300px; background: #f8f9fa; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2 style="font-size: 1.2em; color: #34495e; margin-top: 0;">➕ Nouvel Abonnement</h2>
+            
+            {{ form_start(form) }}
+                <div style="margin-bottom: 15px;">
+                    {{ form_label(form.libelleService) }}<br>
+                    {{ form_widget(form.libelleService, {'attr': {'style': 'width: 100%; padding: 8px; box-sizing: border-box;'}}) }}
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    {{ form_label(form.fournisseur) }}<br>
+                    {{ form_widget(form.fournisseur, {'attr': {'style': 'width: 100%; padding: 8px; box-sizing: border-box;'}}) }}
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    {{ form_label(form.budget) }}<br>
+                    {{ form_widget(form.budget, {'attr': {'style': 'width: 100%; padding: 8px; box-sizing: border-box;'}}) }}
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    {{ form_label(form.montantAnnuel) }}<br>
+                    {{ form_widget(form.montantAnnuel, {'attr': {'style': 'width: 100%; padding: 8px; box-sizing: border-box;'}}) }}
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        {{ form_label(form.dateDebut) }}<br>
+                        {{ form_widget(form.dateDebut, {'attr': {'style': 'width: 100%; padding: 8px; box-sizing: border-box;'}}) }}
+                    </div>
+                    <div style="flex: 1;">
+                        {{ form_label(form.dateFin) }}<br>
+                        {{ form_widget(form.dateFin, {'attr': {'style': 'width: 100%; padding: 8px; box-sizing: border-box;'}}) }}
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    {{ form_label(form.datePreavis) }}<br>
+                    {{ form_widget(form.datePreavis, {'attr': {'style': 'width: 100%; padding: 8px; box-sizing: border-box;'}}) }}
+                </div>
+
+                <div style="margin-bottom: 15px;">
+                    {{ form_label(form.statut) }}<br>
+                    {{ form_widget(form.statut, {'attr': {'style': 'width: 100%; padding: 8px; box-sizing: border-box;'}}) }}
+                </div>
+
+                <button type="submit" style="background-color: #3498db; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold;">
+                    💾 Enregistrer le contrat
+                </button>
+            {{ form_end(form) }}
+        </div>
+
+        {# --- PARTIE DROITE : LA LISTE DES CONTRATS --- #}
+        <div style="flex: 2; min-width: 500px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2 style="font-size: 1.2em; color: #34495e; margin-top: 0;">🗂️ Contrats en cours</h2>
+            
+            <table style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9em;">
+                <thead>
+                    <tr style="background-color: #ecf0f1; text-align: left;">
+                        <th style="padding: 10px; border-bottom: 2px solid #bdc3c7;">Service / Logiciel</th>
+                        <th style="padding: 10px; border-bottom: 2px solid #bdc3c7;">Fournisseur</th>
+                        <th style="padding: 10px; border-bottom: 2px solid #bdc3c7;">Budget</th>
+                        <th style="padding: 10px; border-bottom: 2px solid #bdc3c7;">Coût Annuel</th>
+                        <th style="padding: 10px; border-bottom: 2px solid #bdc3c7;">Échéance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contrat in contrats %}
+                        <tr style="border-bottom: 1px solid #eee;">
+                            <td style="padding: 10px;"><strong>{{ contrat.libelleService }}</strong></td>
+                            <td style="padding: 10px;">{{ contrat.fournisseur ? contrat.fournisseur.nomEntreprise : 'N/A' }}</td>
+                            <td style="padding: 10px;">{{ contrat.budget ? contrat.budget.libelleLigne : 'N/A' }}</td>
+                            <td style="padding: 10px;">{{ contrat.montantAnnuel }} €</td>
+                            <td style="padding: 10px;">
+                                {% if contrat.dateFin %}
+                                    {{ contrat.dateFin|date('d/m/Y') }}
+                                {% else %}
+                                    <span style="color: #27ae60;"><em>Illimité</em></span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" style="padding: 15px; text-align: center; color: #7f8c8d;">
+                                Aucun abonnement enregistré pour le moment.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

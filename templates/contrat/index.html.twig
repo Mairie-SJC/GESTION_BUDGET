@@ -78,26 +78,37 @@
                         <th style="padding: 10px; border-bottom: 2px solid #bdc3c7;">Budget</th>
                         <th style="padding: 10px; border-bottom: 2px solid #bdc3c7;">Coût Annuel</th>
                         <th style="padding: 10px; border-bottom: 2px solid #bdc3c7;">Échéance</th>
+                        <th style="padding: 10px; border-bottom: 2px solid #bdc3c7; text-align: center;">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for contrat in contrats %}
-                        <tr style="border-bottom: 1px solid #eee;">
-                            <td style="padding: 10px;"><strong>{{ contrat.libelleService }}</strong></td>
-                            <td style="padding: 10px;">{{ contrat.fournisseur ? contrat.fournisseur.nomEntreprise : 'N/A' }}</td>
-                            <td style="padding: 10px;">{{ contrat.budget ? contrat.budget.libelleLigne : 'N/A' }}</td>
-                            <td style="padding: 10px;">{{ contrat.montantAnnuel }} €</td>
-                            <td style="padding: 10px;">
-                                {% if contrat.dateFin %}
-                                    {{ contrat.dateFin|date('d/m/Y') }}
-                                {% else %}
-                                    <span style="color: #27ae60;"><em>Illimité</em></span>
-                                {% endif %}
-                            </td>
-                        </tr>
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px;"><strong>{{ contrat.libelleService }}</strong></td>
+                        <td style="padding: 10px;">{{ contrat.fournisseur ? contrat.fournisseur.nomEntreprise : 'N/A' }}</td>
+                        <td style="padding: 10px;">{{ contrat.budget ? contrat.budget.libelleLigne : 'N/A' }}</td>
+                        <td style="padding: 10px;">{{ contrat.montantAnnuel }} €</td>
+                        <td style="padding: 10px;">
+                            {% if contrat.dateFin %}
+                                {{ contrat.dateFin|date('d/m/Y') }}
+                            {% else %}
+                            <span style="color: #27ae60;"><em>Illimité</em></span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 10px;">
+                            <div style="display: flex; gap: 5px; justify-content: center;">
+                                <a href="{{ path('app_contrat_edit', {'id': contrat.id}) }}" style="background-color: #f39c12; color: white; padding: 5px 10px; text-decoration: none; border-radius: 4px; font-size: 0.9em;" title="Modifier">✏️</a>
+                        
+                                <form method="post" action="{{ path('app_contrat_delete', {'id': contrat.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer définitivement ce contrat ?');" style="margin: 0;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ contrat.id) }}">
+                                    <button type="submit" style="background-color: #e74c3c; color: white; padding: 5px 10px; border: none; border-radius: 4px; font-size: 0.9em; cursor: pointer;" title="Supprimer">🗑️</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
                     {% else %}
                         <tr>
-                            <td colspan="5" style="padding: 15px; text-align: center; color: #7f8c8d;">
+                            <td colspan="6" style="padding: 15px; text-align: center; color: #7f8c8d;">
                                 Aucun abonnement enregistré pour le moment.
                             </td>
                         </tr>

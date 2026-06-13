@@ -3,7 +3,7 @@
 {% block title %}ContratLicence index{% endblock %}
 
 {% block body %}
-    <h1>ContratLicence index</h1>
+    <h1>Contrat - Licence</h1>
 
     <table class="table">
         <thead>
@@ -24,15 +24,15 @@
             <tr>
                 <td>{{ contrat_licence.id }}</td>
                 <td>{{ contrat_licence.libelleService }}</td>
-                <td>{{ contrat_licence.fournisseurId }}</td>
+                <td>{{ contrat_licence.fournisseur ? contrat_licence.fournisseur.nomEntreprise : 'Non défini' }}</td>
                 <td>{{ contrat_licence.montantAnnuel }}</td>
                 <td>{{ contrat_licence.dateDebut ? contrat_licence.dateDebut|date('Y-m-d') : '' }}</td>
                 <td>{{ contrat_licence.dateFin ? contrat_licence.dateFin|date('Y-m-d') : '' }}</td>
                 <td>{{ contrat_licence.datePreavis ? contrat_licence.datePreavis|date('Y-m-d') : '' }}</td>
                 <td>{{ contrat_licence.statut }}</td>
                 <td>
-                    <a href="{{ path('app_contrat_licence_show', {'id': contrat_licence.id}) }}">show</a>
-                    <a href="{{ path('app_contrat_licence_edit', {'id': contrat_licence.id}) }}">edit</a>
+                    <a href="{{ path('app_contrat_licence_show', {'id': contrat_licence.id}) }}">Voir</a>
+                    <a href="{{ path('app_contrat_licence_edit', {'id': contrat_licence.id}) }}">modifier</a>
                 </td>
             </tr>
         {% else %}
@@ -43,5 +43,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_contrat_licence_new') }}">Create new</a>
+    <a href="{{ path('app_contrat_licence_new') }}">Nouveau Contrat</a>
 {% endblock %}

@@ -40,11 +40,23 @@ security:
 
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
-
+    role_hierarchy:
+        # Le Responsable hérite des droits de l'Agent (ROLE_USER par défaut)
+        ROLE_RESPONSABLE: [ROLE_USER]
+        # Informatique, Compta et Direction auront ce rôle, qui hérite de Responsable
+        ROLE_ADMIN:       [ROLE_RESPONSABLE]
+        
     # Note: Only the *first* matching rule is applied
     access_control:
+        # 1. On laisse l'accès libre à la page de connexion EN PREMIER
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        
+        # 2. Vos routes spécifiques
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
+        
+        # 3. Le grand verrou final : on bloque absolument tout le reste du site
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:
     security:

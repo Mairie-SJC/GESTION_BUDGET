@@ -9,15 +9,21 @@
     .sjc-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
     .sjc-card { background: var(--sjc-blanc); border-radius: 8px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 4px solid var(--sjc-primaire); }
 </style>
+
 <div class="row mb-4">
     <div class="col-12">
         <div class="card shadow-sm border-0">
             <div class="card-body d-flex justify-content-around flex-wrap gap-3 bg-light rounded">
                 
+                {# Seuls les Responsables et les Admins peuvent déposer des factures #}
+                {% if is_granted('ROLE_RESPONSABLE') %}
                 <a href="{{ path('app_facture_nouvelle') }}" class="btn btn-success btn-lg shadow-sm">
                     🧾 Déposer une Facture
                 </a>
+                {% endif %}
 
+                {# Seuls les super-administrateurs (Compta, IT, Direction) gèrent les structures #}
+                {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app_budget_new') }}" class="btn btn-primary btn-lg shadow-sm">
                     💰 Créer un Budget
                 </a>
@@ -29,14 +35,16 @@
                 <a href="{{ path('app_fournisseur_new') }}" class="btn btn-warning btn-lg shadow-sm">
                     🏢 Nouveau Prestataire
                 </a>
+                {% endif %}
 
             </div>
         </div>
     </div>
 </div>
+
 <div class="sjc-container">
     <h2>Tableau de bord de suivi - Exercice {{ annee }}</h2>
-<p>Aperçu des indicateurs du service informatique.</p>
+    <p>Aperçu des indicateurs du service informatique.</p>
 
     <div class="sjc-card-grid">
         
@@ -49,7 +57,6 @@
                     {{ ligne.libelleLigne }} <br>
                         <div style="margin-top: 8px; font-size: 0.9em;">
                             <div>Budget : {{ ligne.montantAlloue }} €</div>
-                            {# Le calcul dynamique du solde restant #}
                             {% set solde = ligne.getSoldeRestant() %}
                             <div>
                                 Solde disponible : 
@@ -91,53 +98,55 @@
                 {% for facture in factures %}
                     <li style="padding: 10px 0; border-bottom: 1px solid #eee;">
                         
-                        {# 1. Le numéro de la facture #}
                         <strong>Facture n° {{ facture.numeroFacture }}</strong> 
                         
-                        {# 2. Le bouton Modifier #}
+                        {# Édition pour les responsables et admins #}
+                        {% if is_granted('ROLE_RESPONSABLE') %}
                         <a href="{{ path('app_facture_modifier', {'id': facture.id}) }}" style="margin-left: 10px; font-size: 0.85em; color: #f39c12; text-decoration: none;">✏️ Éditer</a>
+                        {% endif %}
                         
-                        {# 3. Le bouton Supprimer #}
+                        {# Suppression dangereuse, réservée aux Admins #}
+                        {% if is_granted('ROLE_ADMIN') %}
                         <a href="{{ path('app_facture_supprimer', {'id': facture.id}) }}" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette facture définitivement ?');" style="margin-left: 10px; font-size: 0.85em; color: #e74c3c; text-decoration: none;">🗑️ Supprimer</a>
+                        {% endif %}
                         
-                        {# Le bouton Voir PDF #}
+                        {# Tout le monde peut voir le PDF #}
                         {% if facture.pdfFilename %}
                             <a href="{{ asset('uploads/factures/' ~ facture.pdfFilename) }}" target="_blank" style="margin-left: 10px; font-size: 0.85em; color: #2980b9; text-decoration: none;">
                                 👁️ Voir le PDF
                             </a>
                         {% endif %}
                         
-                        {# 4. Le montant et le reste des infos #}
                         <span style="float: right;">{{ facture.montantTtc }} €</span><br>
                         <small style="color: #666;">
                             Date : {{ facture.dateFacture ? facture.dateFacture|date('d/m/Y') : 'Non définie' }}<br>
-                            Statut : {{ facture.statut }}<br>
-                            Fournisseur : {{ facture.fournisseur ? facture.fournisseur.nomEntreprise : 'Inconnu' }}
-                        </small>
+                        Statut : {{ facture.statut }}<br>
+                        Fournisseur : {{ facture.fournisseur ? facture.fournisseur.nomEntreprise : 'Inconnu' }}
+                    </small>
 
-                        {# 5. LE BOUTON VALIDER (Placé au bon endroit, avant le else !) #}
-                        {% if facture.statut != 'Paye' %}
-                            <div class="mt-2">
-                                <form action="{{ path('app_facture_valider', {'id': facture.id}) }}" method="POST" onsubmit="return confirm('Confirmez-vous le paiement de cette facture ? Le montant sera déduit du budget alloué.');">
-                                    <button type="submit" class="btn btn-sm text-white w-100 fw-bold" style="background-color: var(--sjc-primaire); border: none;">
-                                        ✓ Valider le paiement
-                                    </button>
-                                </form>
-                            </div>
-                        {% endif %}
-                    </li>
-                {% else %}
-                    <li>Aucune facture enregistrée.</li>
-                {% endfor %}
-                
-            </ul>
-        </div>
-        
-        <div class="sjc-card" style="border-left-color: var(--sjc-texte);">
-            <h3>🏢 Base Fournisseurs</h3>
-            <p>Contacts et numéros de support des prestataires.</p>
-        </div>
-
+                    {# Bouton valider réservé aux responsables/admins #}
+                    {% if facture.statut != 'Paye' and is_granted('ROLE_RESPONSABLE') %}
+                        <div class="mt-2">
+                            <form action="{{ path('app_facture_valider', {'id': facture.id}) }}" method="POST" onsubmit="return confirm('Confirmez-vous le paiement de cette facture ? Le montant sera déduit du budget alloué.');">
+                                <button type="submit" class="btn btn-sm text-white w-100 fw-bold" style="background-color: var(--sjc-primaire); border: none;">
+                                    ✓ Valider le paiement
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+                </li>
+            {% else %}
+                <li>Aucune facture enregistrée.</li>
+            {% endfor %}
+            
+        </ul>
     </div>
+    
+    <div class="sjc-card" style="border-left-color: var(--sjc-texte);">
+        <h3>🏢 Base Fournisseurs</h3>
+        <p>Contacts et numéros de support des prestataires.</p>
+    </div>
+
+</div>
 </div>
 {% endblock %}

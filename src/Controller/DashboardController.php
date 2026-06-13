@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Doctrine\ORM\EntityManagerInterface;
 use setasign\Fpdi\Fpdi;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class DashboardController extends AbstractController
 {
@@ -43,6 +43,7 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/facture/nouvelle', name: 'app_facture_nouvelle')]
+    #[IsGranted('ROLE_RESPONSABLE')] // <-- LE VERROU
     public function nouvelleFacture(Request $request, EntityManagerInterface $entityManager, FournisseurRepository $fournisseurRepository): Response
     {
         $facture = new Facture();
@@ -177,7 +178,8 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    #[Route('/facture/modifier/{id}', name: 'app_facture_modifier')]
+    ##[Route('/facture/modifier/{id}', name: 'app_facture_modifier')]
+    #[IsGranted('ROLE_RESPONSABLE')] // <-- LE VERROU
     public function modifierFacture(\App\Entity\Facture $facture, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(\App\Form\FactureType::class, $facture);
@@ -214,10 +216,12 @@ class DashboardController extends AbstractController
     }
 
     #[Route('/facture/{id}/valider', name: 'app_facture_valider', methods: ['POST'])]
+    #[IsGranted('ROLE_RESPONSABLE')] // <-- LE VERROU
     public function valider(Facture $facture, EntityManagerInterface $entityManager): Response
-    {
+    { // <--- L'ACCOLADE MANQUANTE EST ICI !
+        
         // Bascule directe du statut
-        $facture->setStatut('Paye'); 
+        $facture->setStatut('Paye');
         
         // Sauvegarde en base de données
         $entityManager->flush();

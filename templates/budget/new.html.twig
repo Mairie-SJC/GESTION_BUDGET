@@ -3,9 +3,13 @@
 {% block title %}New Budget{% endblock %}
 
 {% block body %}
-    <h1>Create new Budget</h1>
+    <h1>Créer un nouveau Budget</h1>
 
     {{ include('budget/_form.html.twig') }}
 
-    <a href="{{ path('app_budget_index') }}">back to list</a>
+    <div style="margin-top: 15px;">
+    <a href="{{ path('app_budget_index') }}" style="text-decoration: none; color: #2c3e50; font-weight: bold; padding: 8px 12px; border: 1px solid #ccc; border-radius: 5px; background-color: #f8f9fa;">
+        ⬅ Retour à la liste des budgets
+    </a>
+    </div>
 {% endblock %}

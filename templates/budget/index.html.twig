@@ -3,7 +3,12 @@
 {% block title %}Budget index{% endblock %}
 
 {% block body %}
-    <h1>Budget index</h1>
+    <div style="margin-bottom: 20px;">
+    <a href="{{ path('app_dashboard') }}" style="text-decoration: none; color: #2c3e50; font-weight: bold; padding: 8px 12px; border: 1px solid #ccc; border-radius: 5px; background-color: #f8f9fa;">
+        ⬅ Retour au Tableau de bord
+    </a>
+    </div>
+    <h1>Budget</h1>
 
     <table class="table">
         <thead>
@@ -25,8 +30,8 @@
                 <td>{{ budget.libelleLigne }}</td>
                 <td>{{ budget.montantAlloue }}</td>
                 <td>
-                    <a href="{{ path('app_budget_show', {'id': budget.id}) }}">show</a>
-                    <a href="{{ path('app_budget_edit', {'id': budget.id}) }}">edit</a>
+                    <a href="{{ path('app_budget_show', {'id': budget.id}) }}">Voir</a>
+                    <a href="{{ path('app_budget_edit', {'id': budget.id}) }}">Editer</a>
                 </td>
             </tr>
         {% else %}
@@ -37,5 +42,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_budget_new') }}">Create new</a>
+    <a href="{{ path('app_budget_new') }}">Nouveau budget</a>
 {% endblock %}

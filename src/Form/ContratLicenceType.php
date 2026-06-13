@@ -2,54 +2,59 @@
 
 namespace App\Form;
 
+use App\Entity\ContratLicence;
 use App\Entity\Fournisseur;
 use App\Entity\Budget;
-use App\Entity\ContratLicence;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class ContratLicenceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('libelleService', null, [
-                'label' => 'Nom du service / Logiciel'
+            ->add('libelleService', TextType::class, [
+                'label' => 'Nom de la Licence / Service'
             ])
-            // --- LA CORRECTION DU FOURNISSEUR ---
-            ->add('fournisseur', EntityType::class, [
-                'class' => Fournisseur::class,
-                'label' => 'Fournisseur'
-                // Pas besoin de 'choice_label' grâce à notre fonction magique !
-            ])
-            // ------------------------------------
             ->add('montantAnnuel', null, [
-                'label' => 'Montant annuel HT'
+                'label' => 'Montant Annuel (HT)'
             ])
-            ->add('dateDebut', null, [
-                'widget' => 'single_text', // Affiche un beau calendrier cliquable
-                'label' => 'Date de début'
-            ])
-            ->add('dateFin', null, [
+            ->add('dateDebut', DateType::class, [
                 'widget' => 'single_text',
-                'required' => false, // Optionnel, s'il n'y a pas de date de fin prévue
-                'label' => 'Date de fin'
+                'label' => 'Date de Début'
             ])
-            ->add('datePreavis', null, [
+            ->add('dateFin', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false,
-                'label' => 'Date de préavis (alerte)'
+                'label' => 'Date de Fin'
             ])
-            ->add('statut')
-            // --- LA CORRECTION DU BUDGET ---
+            ->add('datePreavis', DateType::class, [
+                'widget' => 'single_text',
+                'required' => false,
+                'label' => 'Date de Préavis'
+            ])
+            ->add('statut', TextType::class, [
+                'required' => false,
+                'label' => 'Statut (Actif, Résilié...)'
+            ])
+            
+            // --- LISTE DEROULANTE DES FOURNISSEURS ---
+            ->add('fournisseur', EntityType::class, [
+                'class' => Fournisseur::class,
+                'choice_label' => 'nomEntreprise', // Utilise la propriété exacte vue dans DBeaver
+                'label' => 'Fournisseur Prestataire'
+            ])
+            
+            // --- LISTE DEROULANTE DES BUDGETS ---
             ->add('budget', EntityType::class, [
                 'class' => Budget::class,
-                'choice_label' => 'libelleLigne', // On affiche le nom en clair !
-                'label' => 'Ligne budgétaire'
+                'choice_label' => 'codeComptable', // Affichera le numéro de compte (ex: 611)
+                'label' => 'Compte d\'Imputation Budgétaire'
             ])
-            // -------------------------------
         ;
     }
 

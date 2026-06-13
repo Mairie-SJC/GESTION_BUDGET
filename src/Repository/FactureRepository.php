@@ -40,4 +40,17 @@ class FactureRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    /**
+     * Récupère uniquement les factures liées à une année budgétaire précise
+     */
+    public function findFacturesByAnnee(int $annee): array
+    {
+        return $this->createQueryBuilder('f')        // 'f' représente la Facture
+            ->join('f.budget', 'b')                  // On fait la liaison avec le Budget ('b')
+            ->andWhere('b.annee = :annee')           // On filtre sur l'année du budget
+            ->setParameter('annee', $annee)          // On injecte la valeur de l'année de façon sécurisée
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 }

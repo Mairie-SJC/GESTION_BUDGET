@@ -29,7 +29,8 @@ class DashboardController extends AbstractController
         $budgets = $budgetRepository->findBy(['annee' => $anneeEnCours]);
 
         // 2. On récupère le reste des données
-        $factures = $factureRepository->findAll();
+        // On remplace le findAll() par notre fonction personnalisée
+        $factures = $factureRepository->findFacturesByAnnee($anneeEnCours);
         $contrats = $contratsRepository->findAll(); // <-- La ligne qui manquait !
 
         // 3. On envoie TOUT à la vue Twig

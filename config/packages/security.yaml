@@ -51,13 +51,15 @@ security:
         # 1. On laisse l'accès libre à la page de connexion EN PREMIER
         - { path: ^/login, roles: PUBLIC_ACCESS }
         
+        # ---> LA PORTE DÉROBÉE TEMPORAIRE DOIT ÊTRE ICI (AVANT LE VERROU GLOBAL) <---
+        - { path: ^/utilisateurs/nouveau, roles: PUBLIC_ACCESS }
+        
         # 2. Vos routes spécifiques
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
         
         # 3. Le grand verrou final : on bloque absolument tout le reste du site
         - { path: ^/, roles: IS_AUTHENTICATED_FULLY }
-
 when@test:
     security:
         password_hashers:

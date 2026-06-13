@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des agents - Service Informatique{% endblock %}
+
+{% block body %}
+<div style="max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+    
+    <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+        <a href="{{ path('app_dashboard') }}" style="text-decoration: none; color: #666;">⬅ Retour au tableau de bord</a>
+        
+        <a href="{{ path('app_user_new') }}" class="btn text-white fw-bold shadow-sm" style="background-color: var(--sjc-primaire); border: none; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
+            + Ajouter un nouvel agent
+        </a>
+    </div>
+
+    <div class="sjc-card" style="background: var(--sjc-blanc); border-radius: 8px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); border-left: 4px solid var(--sjc-primaire);">
+        <h2>👥 Gestion des habilitations</h2>
+        <p style="color: #666; margin-bottom: 20px;">Liste des agents ayant accès à l'application de gestion budgétaire.</p>
+
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 2px solid var(--sjc-primaire);">
+                    <th style="padding: 12px 8px;">Identifiant (E-mail)</th>
+                    <th style="padding: 12px 8px;">Niveau d'accès</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for agent in users %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    <td style="padding: 12px 8px; font-weight: 500;">{{ agent.email }}</td>
+                    <td style="padding: 12px 8px;">
+                        {# Boucle pour afficher les rôles de façon esthétique #}
+                        {% for role in agent.roles %}
+                            {% if role == 'ROLE_ADMIN' %}
+                                <span style="background-color: #e74c3c; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold; margin-right: 5px;">Administrateur</span>
+                            {% elseif role == 'ROLE_RESPONSABLE' %}
+                                <span style="background-color: #f39c12; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold; margin-right: 5px;">Responsable</span>
+                            {% elseif role == 'ROLE_USER' %}
+                                <span style="background-color: #3498db; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.85em; font-weight: bold; margin-right: 5px;">Agent</span>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2" style="padding: 20px; text-align: center; color: #888;">Aucun agent enregistré dans la base.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

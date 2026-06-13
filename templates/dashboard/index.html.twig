@@ -22,7 +22,7 @@
                 </a>
                 {% endif %}
 
-                {# Seuls les super-administrateurs (Compta, IT, Direction) gèrent les structures #}
+                {# Seuls les super-administrateurs (Compta, IT, Direction) gèrent les structures et les agents #}
                 {% if is_granted('ROLE_ADMIN') %}
                 <a href="{{ path('app_budget_new') }}" class="btn btn-primary btn-lg shadow-sm">
                     💰 Créer un Budget
@@ -34,6 +34,11 @@
 
                 <a href="{{ path('app_fournisseur_new') }}" class="btn btn-warning btn-lg shadow-sm">
                     🏢 Nouveau Prestataire
+                </a>
+                
+                {# LE NOUVEAU BOUTON ICI #}
+                <a href="{{ path('app_user_index') }}" class="btn btn-dark btn-lg shadow-sm">
+                    👥 Gérer les Agents
                 </a>
                 {% endif %}
 

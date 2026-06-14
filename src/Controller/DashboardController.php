@@ -178,7 +178,7 @@ class DashboardController extends AbstractController
         ]);
     }
 
-    ##[Route('/facture/modifier/{id}', name: 'app_facture_modifier')]
+    #[Route('/facture/modifier/{id}', name: 'app_facture_modifier')]
     #[IsGranted('ROLE_RESPONSABLE')] // <-- LE VERROU
     public function modifierFacture(\App\Entity\Facture $facture, Request $request, EntityManagerInterface $entityManager): Response
     {

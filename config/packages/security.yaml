@@ -51,8 +51,8 @@ security:
         # 1. On laisse l'accès libre à la page de connexion EN PREMIER
         - { path: ^/login, roles: PUBLIC_ACCESS }
         
-        # ---> LA PORTE DÉROBÉE TEMPORAIRE DOIT ÊTRE ICI (AVANT LE VERROU GLOBAL) <---
-        - { path: ^/utilisateurs/nouveau, roles: PUBLIC_ACCESS }
+        //# ---> LA PORTE DÉROBÉE TEMPORAIRE DOIT ÊTRE ICI (AVANT LE VERROU GLOBAL) <---
+       // - { path: ^/utilisateurs/nouveau, roles: PUBLIC_ACCESS }
         
         # 2. Vos routes spécifiques
         - { path: ^/admin, roles: ROLE_ADMIN }
